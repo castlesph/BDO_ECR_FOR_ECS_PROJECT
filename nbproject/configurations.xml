@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="84">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <logicalFolder name="HeaderFiles"
+                   displayName="Header Files"
+                   projectFiles="true">
+      <itemPath>Includes/DatabaseFunc.h</itemPath>
+      <itemPath>ECR/ECRTrans.h</itemPath>
+      <itemPath>Includes/ECRTypedef.h</itemPath>
+      <itemPath>Includes/MultiAplib.h</itemPath>
+      <itemPath>ECR/MultiAptrans.h</itemPath>
+      <itemPath>Includes/Utils.h</itemPath>
+      <itemPath>Includes/debug.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="ResourceFiles"
+                   displayName="Resource Files"
+                   projectFiles="true">
+    </logicalFolder>
+    <logicalFolder name="SourceFiles"
+                   displayName="Source Files"
+                   projectFiles="true">
+      <itemPath>Database/DatabaseFunc.c</itemPath>
+      <itemPath>Main/ECRMain.c</itemPath>
+      <itemPath>ECR/ECRTrans.c</itemPath>
+      <itemPath>ECR/MultiAptrans.c</itemPath>
+      <itemPath>Utils/Utils.c</itemPath>
+      <itemPath>Debug/debug.c</itemPath>
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false">
+      <itemPath>NbMakefile</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <projectmakefile>NbMakefile</projectmakefile>
+  <confs>
+    <conf name="Debug" type="1">
+      <toolsSet>
+        <remote-sources-mode>LOCAL_SOURCES</remote-sources-mode>
+        <compilerSet>Gnueabi|Gnueabi</compilerSet>
+        <dependencyChecking>false</dependencyChecking>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <commandlineTool>arm-brcm-linux-gnueabi-gcc</commandlineTool>
+          <incDir>
+            <pElem>C:/Program Files/Castles/VEGA5000S/include</pElem>
+            <pElem>C:/Program Files (x86)/Castles/VEGA5000S/include</pElem>
+          </incDir>
+          <commandLine>"-I${SDKV5SINC}" -fsigned-char -Wundef -Wstrict-prototypes -Wno-trigraphs -Wimplicit -Wformat</commandLine>
+        </cTool>
+        <ccTool>
+          <commandlineTool>arm-brcm-linux-gnueabi-g++</commandlineTool>
+          <incDir>
+            <pElem>C:/Program Files/Castles/VEGA5000S/include</pElem>
+            <pElem>C:/Program Files (x86)/Castles/VEGA5000S/include</pElem>
+          </incDir>
+          <commandLine>"-I${SDKV5SINC}" -fsigned-char -Wundef -Wno-trigraphs -Wimplicit -Wformat</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>dist/V5S/${PRONAME}/10V5S_App/${APPNAME}</output>
+          <commandlineTool>arm-brcm-linux-gnueabi-g++</commandlineTool>
+          <linkerLibItems>
+            <linkerLibLibItem>caethernet</linkerLibLibItem>
+            <linkerLibLibItem>cafont</linkerLibLibItem>
+            <linkerLibLibItem>cafs</linkerLibLibItem>
+            <linkerLibLibItem>cakms</linkerLibLibItem>
+            <linkerLibLibItem>calcd</linkerLibLibItem>
+            <linkerLibLibItem>camodem</linkerLibLibItem>
+            <linkerLibLibItem>capmodem</linkerLibLibItem>
+            <linkerLibLibItem>caprt</linkerLibLibItem>
+            <linkerLibLibItem>cartc</linkerLibLibItem>
+            <linkerLibLibItem>cauart</linkerLibLibItem>
+            <linkerLibLibItem>cauldpm</linkerLibLibItem>
+            <linkerLibLibItem>causbh</linkerLibLibItem>
+            <linkerLibLibItem>cagsm</linkerLibLibItem>
+            <linkerLibLibItem>cabarcode</linkerLibLibItem>
+            <linkerLibLibItem>pthread</linkerLibLibItem>
+            <linkerLibLibItem>dl</linkerLibLibItem>
+            <linkerLibLibItem>caclvw</linkerLibLibItem>
+            <linkerLibLibItem>catls</linkerLibLibItem>
+            <linkerLibLibItem>ctosapi</linkerLibLibItem>
+            <linkerLibLibItem>z</linkerLibLibItem>
+            <linkerLibLibItem>ssl</linkerLibLibItem>
+            <linkerLibLibItem>crypto</linkerLibLibItem>
+            <linkerLibLibItem>curl</linkerLibLibItem>
+            <linkerLibLibItem>freetype</linkerLibLibItem>
+            <linkerLibLibItem>xml2</linkerLibLibItem>
+            <linkerLibLibItem>caemvl2</linkerLibLibItem>
+            <linkerLibLibItem>casqlite</linkerLibLibItem>
+            <linkerLibLibItem>caxml</linkerLibLibItem>
+            <linkerLibLibItem>v5smultiap</linkerLibLibItem>
+            <linkerLibLibItem>caclvw</linkerLibLibItem>
+            <linkerLibLibItem>caemvl2</linkerLibLibItem>
+            <linkerLibLibItem>v5smultiap</linkerLibLibItem>
+            <linkerLibLibItem>caclentry</linkerLibLibItem>
+            <linkerLibLibItem>caclmdl</linkerLibLibItem>
+            <linkerLibLibItem>caemvl2</linkerLibLibItem>
+            <linkerLibLibItem>v3_libepadso</linkerLibLibItem>
+            <linkerLibLibItem>caemvl2ap</linkerLibLibItem>
+            <linkerLibLibItem>v5scfgexpress</linkerLibLibItem>
+            <linkerLibLibItem>v5sinput</linkerLibLibItem>
+            <linkerLibLibItem>v5smultiap</linkerLibLibItem>
+          </linkerLibItems>
+          <commandLine>-L . "-L${SDKV5SLIB}" "-L${SDKV5SLIBN}"</commandLine>
+        </linkerTool>
+      </compileType>
+    </conf>
+    <conf name="Device" type="1">
+      <toolsSet>
+        <remote-sources-mode>LOCAL_SOURCES</remote-sources-mode>
+        <compilerSet>Gnueabi|Gnueabi</compilerSet>
+        <dependencyChecking>false</dependencyChecking>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <developmentMode>5</developmentMode>
+          <commandlineTool>arm-brcm-linux-gnueabi-gcc</commandlineTool>
+          <incDir>
+            <pElem>C:/Program Files/Castles/VEGA5000S/include</pElem>
+            <pElem>C:/Program Files (x86)/Castles/VEGA5000S/include</pElem>
+          </incDir>
+          <commandLine>"-I${SDKV5SINC}" -fsigned-char -Wundef -Wstrict-prototypes -Wno-trigraphs -Wimplicit -Wformat</commandLine>
+        </cTool>
+        <ccTool>
+          <developmentMode>5</developmentMode>
+          <commandlineTool>arm-brcm-linux-gnueabi-g++</commandlineTool>
+          <incDir>
+            <pElem>C:/Program Files/Castles/VEGA5000S/include</pElem>
+            <pElem>C:/Program Files (x86)/Castles/VEGA5000S/include</pElem>
+          </incDir>
+          <commandLine>"-I${SDKV5SINC}" -fsigned-char -Wundef -Wno-trigraphs -Wimplicit -Wformat</commandLine>
+        </ccTool>
+        <fortranCompilerTool>
+          <developmentMode>5</developmentMode>
+        </fortranCompilerTool>
+        <asmTool>
+          <developmentMode>5</developmentMode>
+        </asmTool>
+        <linkerTool>
+          <output>dist/V5S/${PRONAME}/10V5S_App/${APPNAME}</output>
+          <commandlineTool>arm-brcm-linux-gnueabi-g++</commandlineTool>
+          <linkerLibItems>
+            <linkerLibLibItem>caethernet</linkerLibLibItem>
+            <linkerLibLibItem>cafont</linkerLibLibItem>
+            <linkerLibLibItem>cafs</linkerLibLibItem>
+            <linkerLibLibItem>cakms</linkerLibLibItem>
+            <linkerLibLibItem>calcd</linkerLibLibItem>
+            <linkerLibLibItem>camodem</linkerLibLibItem>
+            <linkerLibLibItem>capmodem</linkerLibLibItem>
+            <linkerLibLibItem>caprt</linkerLibLibItem>
+            <linkerLibLibItem>cartc</linkerLibLibItem>
+            <linkerLibLibItem>cauart</linkerLibLibItem>
+            <linkerLibLibItem>cauldpm</linkerLibLibItem>
+            <linkerLibLibItem>causbh</linkerLibLibItem>
+            <linkerLibLibItem>cagsm</linkerLibLibItem>
+            <linkerLibLibItem>cabarcode</linkerLibLibItem>
+            <linkerLibLibItem>pthread</linkerLibLibItem>
+            <linkerLibLibItem>dl</linkerLibLibItem>
+            <linkerLibLibItem>caclvw</linkerLibLibItem>
+            <linkerLibLibItem>catls</linkerLibLibItem>
+            <linkerLibLibItem>ctosapi</linkerLibLibItem>
+            <linkerLibLibItem>z</linkerLibLibItem>
+            <linkerLibLibItem>ssl</linkerLibLibItem>
+            <linkerLibLibItem>crypto</linkerLibLibItem>
+            <linkerLibLibItem>curl</linkerLibLibItem>
+            <linkerLibLibItem>freetype</linkerLibLibItem>
+            <linkerLibLibItem>xml2</linkerLibLibItem>
+            <linkerLibLibItem>caemvl2</linkerLibLibItem>
+            <linkerLibLibItem>casqlite</linkerLibLibItem>
+            <linkerLibLibItem>caxml</linkerLibLibItem>
+            <linkerLibLibItem>v5smultiap</linkerLibLibItem>
+            <linkerLibLibItem>v3_libepadso</linkerLibLibItem>
+            <linkerLibLibItem>v5scfgexpress</linkerLibLibItem>
+            <linkerLibLibItem>bluetooth</linkerLibLibItem>
+            <linkerLibLibItem>caclvw</linkerLibLibItem>
+            <linkerLibLibItem>caemvl2</linkerLibLibItem>
+            <linkerLibLibItem>caemvl2</linkerLibLibItem>
+            <linkerLibLibItem>caclentry</linkerLibLibItem>
+            <linkerLibLibItem>caclmdl</linkerLibLibItem>
+            <linkerLibLibItem>caemvl2ap</linkerLibLibItem>
+          </linkerLibItems>
+          <commandLine>-L . "-L${SDKV5SLIB}" "-L${SDKV5SLIBN}"</commandLine>
+        </linkerTool>
+      </compileType>
+    </conf>
+  </confs>
+</configurationDescriptor>
