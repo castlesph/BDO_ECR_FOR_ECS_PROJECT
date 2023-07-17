@@ -44,6 +44,7 @@ extern "C" {
 #define ECR_KIT_SALE_TAG		"11" 
 #define ECR_RENEWAL_TAG			"12" 
 #define ECR_PTS_AWARDING_TAG	"13" 
+#define ECR_PIN_VERIFY          "ZZ"
 
 
 #define ECR_PRNT_GRS_TAG		"57" 

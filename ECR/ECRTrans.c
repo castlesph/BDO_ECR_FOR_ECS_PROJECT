@@ -597,8 +597,9 @@ int inECRReceiveAnalyse(void)
 	
  	while(1)
  	{
-		if(offset >= inRcvLen)
-			break;
+        if(offset >= lECRRecvLen - 1) {//do not include LRC. 
+            break;
+        }
 
 		if(!memcmp(&szECRRecvData[offset], ECR_AMOUNT_TAG, 2))
 		{
@@ -982,6 +983,11 @@ int inECRReceiveAnalyse(void)
 					break;
 			}
 
+            if(!memcmp(ECRReq.txn_code, ECR_PIN_VERIFY, 2))
+            {
+               break;
+            }
+
 			if(!memcmp(ECRReq.txn_code, ECR_KIT_SALE_TAG, 2))
 			{
 				if(chAmtFlag)
@@ -1193,6 +1199,16 @@ int inECRReceiveAnalyse(void)
             return inRet;
 		}
 	}
+
+    if(!memcmp(ECRReq.txn_code, ECR_PIN_VERIFY, 2))
+    {
+        inRet = inCTOSS_MultiAPSaveData(d_IPC_CMD_PIN_VERIFY);
+        if(d_OK != inRet)
+            return inRet;
+
+        inRet = inCTOSS_MultiAPGetData();
+            return inRet;
+    }
 
 	if(!memcmp(ECRReq.txn_code, ECR_KIT_SALE_TAG, 2))
 	{
@@ -1440,7 +1456,6 @@ int inECRReceiveAnalyse(void)
 		strcpy(ECRResp.resp_code,"00");
 		return d_OK;
 	}
-	
 	
 	vdDebug_LogPrintf("BRANCH EXIT");
 	return BRANCH_EXIT;
@@ -2597,7 +2612,88 @@ int inECRSendResponse(void)
 			memcpy(&szECRSendData[offset], ECRResp.merchant_name, ECR_MERCHANT_NAME_SIZE);
 			offset += ECR_MERCHANT_NAME_SIZE;
 			szECRSendData[offset] = ECR_SEPARATOR;
-			offset += END_PRESENT_SIZE;			
+            offset += END_PRESENT_SIZE;
+		}
+        else if (!memcmp(ECRReq.txn_code, ECR_PIN_VERIFY, 2) )
+        {
+            //RESPONSE TEXT
+            memcpy(&szECRSendData[offset], ECR_RESP_TEXT_TAG, TAG_SIZE);
+            offset += TAG_SIZE;
+            vdSetLength(ECR_RESP_TEXT_SIZE, &szECRSendData[offset]);
+            offset += LENGTH_SIZE;		
+
+            memset(&ECRResp.resp_code[strlen(ECRResp.resp_code)],0x20,ECR_RESP_TEXT_SIZE-strlen(ECRResp.resp_code));
+
+            if(!memcmp(ECRResp.resp_code,"00",ECR_RESP_CODE_SIZE))
+            memcpy(&szECRSendData[offset], ECR_APPROVED_RESP, ECR_RESP_TEXT_SIZE);
+            else 
+            memcpy(&szECRSendData[offset], ECRResp.resp_text, ECR_RESP_TEXT_SIZE);
+
+            offset += ECR_RESP_TEXT_SIZE;
+            szECRSendData[offset] = ECR_SEPARATOR;
+            offset += END_PRESENT_SIZE;
+
+
+            //AUTH CODE
+            memcpy(&szECRSendData[offset], ECR_AUTH_CODE_TAG, TAG_SIZE);
+            offset += TAG_SIZE;
+            vdSetLength(AUTH_CODE_SIZE, &szECRSendData[offset]);
+            offset += LENGTH_SIZE;
+            if(memcmp(ECRResp.auth_code,"Y1",2) == 0)
+            {
+            memset(szTemp,0x20,AUTH_CODE_SIZE);
+            memcpy(szTemp,ECRResp.auth_code,2); //copy Y1
+            memcpy(&szECRSendData[offset], szTemp, AUTH_CODE_SIZE);
+            }
+            else
+            memcpy(&szECRSendData[offset], ECRResp.auth_code, AUTH_CODE_SIZE);
+            
+            offset += AUTH_CODE_SIZE;
+            szECRSendData[offset] = ECR_SEPARATOR;
+            offset += END_PRESENT_SIZE;
+
+            //INVOICE NUMBER
+            memcpy(&szECRSendData[offset], ECR_RESP_INV_TAG, TAG_SIZE);
+            offset += TAG_SIZE;
+            vdSetLength(INVOICE_NUMBER_SIZE, &szECRSendData[offset]);
+            offset += LENGTH_SIZE;
+            memcpy(&szECRSendData[offset], ECRResp.inv_no, INVOICE_NUMBER_SIZE);
+            offset += INVOICE_NUMBER_SIZE;
+            szECRSendData[offset] = ECR_SEPARATOR;
+            offset += END_PRESENT_SIZE;
+
+
+            //TID
+            memcpy(&szECRSendData[offset], ECR_TID_TAG, TAG_SIZE);
+            offset += TAG_SIZE;
+            vdSetLength(TID_SIZE, &szECRSendData[offset]);
+            offset += LENGTH_SIZE;
+            memcpy(&szECRSendData[offset], ECRResp.tid, TID_SIZE);
+            offset += TID_SIZE;
+            szECRSendData[offset] = ECR_SEPARATOR;
+            offset += END_PRESENT_SIZE;
+
+
+            //MID			
+            memcpy(&szECRSendData[offset], ECR_MID_TAG, TAG_SIZE);
+            offset += TAG_SIZE;
+            vdSetLength(MID_SIZE, &szECRSendData[offset]);
+            offset += LENGTH_SIZE;
+            memcpy(&szECRSendData[offset], ECRResp.mid, MID_SIZE);
+            offset += MID_SIZE;
+            szECRSendData[offset] = ECR_SEPARATOR;
+            offset += END_PRESENT_SIZE;
+
+            //CARD NO
+            memcpy(&szECRSendData[offset], ECR_CARD_NO_TAG, TAG_SIZE);
+            offset += TAG_SIZE;
+            inSize = strlen(ECRResp.card_no);
+            vdSetLength(inSize, &szECRSendData[offset]);
+            offset += LENGTH_SIZE;
+            memcpy(&szECRSendData[offset], ECRResp.card_no, inSize);
+            offset += inSize;
+            szECRSendData[offset] = ECR_SEPARATOR;
+            offset += END_PRESENT_SIZE;
 		}
 		else if (!memcmp(ECRReq.txn_code, ECR_COMM_TEST_TAG, 2))
 		{

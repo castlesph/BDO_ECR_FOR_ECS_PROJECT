@@ -50,7 +50,7 @@ typedef enum
 	d_IPC_CMD_SMAC_RENEWAL		= 0x4a,
 	d_IPC_CMD_SMAC_PTS_AWARDING = 0x4b,
 	d_IPC_CMD_IPP				= 0x4c,
-
+    d_IPC_CMD_PIN_VERIFY        = 0x60,
 //gcitra
 }IPC_CMD_TYPES;
 
