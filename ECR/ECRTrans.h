@@ -152,6 +152,7 @@ extern "C" {
 #define AMOUNT_VALUE_SIZE		12
 #define CASHBACK_VALUE_SIZE		12
 #define INVOICE_NUMBER_SIZE		6
+#define TRACE_NUMBER_SIZE       6
 #define MID_SIZE				15
 #define ISSUER_SIZE				10
 #define ISSUERID_SIZE			2
@@ -239,6 +240,7 @@ typedef struct tagECR_RESP
 	char szSMACPay_CardSeqNo[2+1];
 	char inst_terms[2 + 1];
 	char inst_promo[2 + 1];
+	char trace_no[TRACE_NUMBER_SIZE+1];
 } ECR_RESP;
 
 /*

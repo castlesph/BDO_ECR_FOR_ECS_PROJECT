@@ -1493,6 +1493,7 @@ int inECRSendAnalyse(void)
 	wub_hex_2_str(srTransRec.szTotalAmount, ECRResp.Trac_amout, 6);
 	wub_hex_2_str(srTransRec.szBatchNo, ECRResp.batch_no, 3);
 	strncpy(ECRResp.rref, srTransRec.szRRN, RET_REF_SIZE);
+    sprintf(ECRResp.trace_no, "%06ld", srTransRec.ulTraceNum);
 
 	if(srTransRec.HDTid == 53 && strTCT.fSMMode == TRUE){
 		
@@ -2652,13 +2653,13 @@ int inECRSendResponse(void)
             szECRSendData[offset] = ECR_SEPARATOR;
             offset += END_PRESENT_SIZE;
 
-            //INVOICE NUMBER
-            memcpy(&szECRSendData[offset], ECR_RESP_INV_TAG, TAG_SIZE);
+            //TRACE NUMBER IN PLACE OF INVOICE NUMBER FIELD AS PIN VERIFY DOES NOT HAVE INVOICE NUMBER
+            memcpy(&szECRSendData[offset], ECR_RESP_INV_TAG, TAG_SIZE);//Still use the ECR_RESP_INV_TAG since Trace Number has no existing tag
             offset += TAG_SIZE;
-            vdSetLength(INVOICE_NUMBER_SIZE, &szECRSendData[offset]);
+            vdSetLength(TRACE_NUMBER_SIZE, &szECRSendData[offset]);
             offset += LENGTH_SIZE;
-            memcpy(&szECRSendData[offset], ECRResp.inv_no, INVOICE_NUMBER_SIZE);
-            offset += INVOICE_NUMBER_SIZE;
+            memcpy(&szECRSendData[offset], ECRResp.trace_no, TRACE_NUMBER_SIZE);
+            offset += TRACE_NUMBER_SIZE;
             szECRSendData[offset] = ECR_SEPARATOR;
             offset += END_PRESENT_SIZE;
 
