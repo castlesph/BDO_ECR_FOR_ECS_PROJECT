@@ -186,6 +186,9 @@ extern "C" {
 
 #define VS_CONTINUE				99
 
+#define MIN_RESPONSE_CODE       0
+#define MAX_RESPONSE_CODE       99
+
 typedef struct tagECR_REQ
 {
 	char req_resp[REQ_RESP_SIZE + 1];

@@ -1707,10 +1707,11 @@ int inECRSendResponse(void)
 		memset(&ECRResp.resp_code[strlen(ECRResp.resp_code)],0x20,ECR_RESP_TEXT_SIZE-strlen(ECRResp.resp_code));
 		//gcitra
 
-		if(!memcmp(ECRResp.resp_code,"00",ECR_RESP_CODE_SIZE))
-			memcpy(&szECRSendData[offset], ECR_APPROVED_RESP, ECR_RESP_TEXT_SIZE);
-		if ((!memcmp(ECRResp.resp_code, ECR_UNKNOWN_ERR, ECR_RESP_CODE_SIZE)) ||
-		   (!memcmp(ECRResp.resp_code, ECR_DECLINED_ERR, ECR_RESP_CODE_SIZE)))	
+        if (!memcmp(ECRResp.resp_code,"00",ECR_RESP_CODE_SIZE))
+            memcpy(&szECRSendData[offset], ECR_APPROVED_RESP, ECR_RESP_TEXT_SIZE);
+        if ((!memcmp(ECRResp.resp_code, ECR_UNKNOWN_ERR, ECR_RESP_CODE_SIZE)) ||
+            (!memcmp(ECRResp.resp_code, ECR_DECLINED_ERR, ECR_RESP_CODE_SIZE)) ||
+            ((atoi(ECRResp.resp_code) > MIN_RESPONSE_CODE && atoi(ECRResp.resp_code) <= MAX_RESPONSE_CODE))) //Copy the response texts as well for non approved response codes
 		{
 			strcpy(ECRResp.resp_text,srTransRec.szECRRespText);
 			memcpy(&szECRSendData[offset], ECRResp.resp_text, ECR_RESP_TEXT_SIZE);
