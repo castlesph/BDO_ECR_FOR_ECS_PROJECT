@@ -1695,7 +1695,7 @@ int inECRSendResponse(void)
     //-----------------------------------------------------------------------------------------------------------------------------------
 	// UNSUCCESSFULL ECR TRXN
 	//-----------------------------------------------------------------------------------------------------------------------------------
-	if(memcmp(ECRResp.resp_code,"00",ECR_RESP_CODE_SIZE))
+	if(memcmp(ECRResp.resp_code,"00",ECR_RESP_CODE_SIZE) && memcmp(ECRReq.txn_code, ECR_PIN_VERIFY, 2)) //PIN VERIFY SHOULD NOT USE THIS CONDITION
 	{
 	    vdDebug_LogPrintf("txn Failed");
 //gcitra
@@ -1778,8 +1778,7 @@ int inECRSendResponse(void)
     //-----------------------------------------------------------------------------------------------------------------------------------
 	// SUCCESSFULL ECR TRXN
 	//-----------------------------------------------------------------------------------------------------------------------------------
-	if(!memcmp(ECRResp.resp_code,"00",ECR_RESP_CODE_SIZE))
-	{
+	if(!memcmp(ECRResp.resp_code,"00",ECR_RESP_CODE_SIZE) || !memcmp(ECRReq.txn_code, ECR_PIN_VERIFY, 2)) {
 	    vdDebug_LogPrintf("txn Success");
 
 //gcitra    
@@ -2622,14 +2621,23 @@ int inECRSendResponse(void)
             memcpy(&szECRSendData[offset], ECR_RESP_TEXT_TAG, TAG_SIZE);
             offset += TAG_SIZE;
             vdSetLength(ECR_RESP_TEXT_SIZE, &szECRSendData[offset]);
-            offset += LENGTH_SIZE;		
+            offset += LENGTH_SIZE;
 
             memset(&ECRResp.resp_code[strlen(ECRResp.resp_code)],0x20,ECR_RESP_TEXT_SIZE-strlen(ECRResp.resp_code));
 
-            if(!memcmp(ECRResp.resp_code,"00",ECR_RESP_CODE_SIZE))
-            memcpy(&szECRSendData[offset], ECR_APPROVED_RESP, ECR_RESP_TEXT_SIZE);
-            else 
-            memcpy(&szECRSendData[offset], ECRResp.resp_text, ECR_RESP_TEXT_SIZE);
+            if (!memcmp(ECRResp.resp_code,"00",ECR_RESP_CODE_SIZE)) {
+                memcpy(&szECRSendData[offset], ECR_APPROVED_RESP, ECR_RESP_TEXT_SIZE);
+            } else if ((!memcmp(ECRResp.resp_code, ECR_UNKNOWN_ERR, ECR_RESP_CODE_SIZE)) ||
+                        (!memcmp(ECRResp.resp_code, ECR_DECLINED_ERR, ECR_RESP_CODE_SIZE)) ||
+                         ((atoi(ECRResp.resp_code) > MIN_RESPONSE_CODE && atoi(ECRResp.resp_code) <= MAX_RESPONSE_CODE))) { //Copy the response texts as well for non approved response codes
+                strcpy(ECRResp.resp_text,srTransRec.szECRRespText);
+                memcpy(&szECRSendData[offset], ECRResp.resp_text, ECR_RESP_TEXT_SIZE);
+            } else {
+                if(strlen(ECRResp.resp_code) == 0) {
+                    strcpy(ECRResp.resp_text,srTransRec.szECRRespText);
+                }
+                memcpy(&szECRSendData[offset], ECRResp.resp_text, ECR_RESP_TEXT_SIZE);
+            }
 
             offset += ECR_RESP_TEXT_SIZE;
             szECRSendData[offset] = ECR_SEPARATOR;
@@ -2647,9 +2655,12 @@ int inECRSendResponse(void)
             memcpy(szTemp,ECRResp.auth_code,2); //copy Y1
             memcpy(&szECRSendData[offset], szTemp, AUTH_CODE_SIZE);
             }
-            else
-            memcpy(&szECRSendData[offset], ECRResp.auth_code, AUTH_CODE_SIZE);
-            
+            else if (!memcmp(ECRResp.resp_code,"00",ECR_RESP_CODE_SIZE)) {
+                memcpy(&szECRSendData[offset], ECRResp.auth_code, AUTH_CODE_SIZE);
+            } else {//NOT APPROVED
+                memcpy(&szECRSendData[offset], "000000", AUTH_CODE_SIZE);
+            }
+
             offset += AUTH_CODE_SIZE;
             szECRSendData[offset] = ECR_SEPARATOR;
             offset += END_PRESENT_SIZE;
